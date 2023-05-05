@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { DoImport } from './pages/import';
+import { About } from './pages/about';
+import { MnemoDump } from './pages/mnemodump';
+import { ImportComplete } from './pages/importcomplete';
+import { Navbar } from './components/navbar';
+import { SurveyStorage } from './common';
 
-function App() {
+
+export const App = () => {
+  const [imports, setImport] = useState(SurveyStorage.getImports());
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div>
+          <Navbar imports={imports} />
+          <Routes>
+              <Route path="/" element={<DoImport setImport={setImport} />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/dump/:id/:surveyNumber" element={<MnemoDump />} />
+              <Route path="/imported/:id" element={<ImportComplete imports={imports} />} />
+          </Routes>
+      </div>
   );
 }
-
-export default App;
