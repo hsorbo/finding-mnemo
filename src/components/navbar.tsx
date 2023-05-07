@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Import } from "../common";
 
-export const Navbar = ({imports}: {imports:Import[]})   => {
+export const Navbar = ({imports}: {imports:Import[]}) => {
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">

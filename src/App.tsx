@@ -6,6 +6,7 @@ import { MnemoDump } from './pages/mnemodump';
 import { ImportComplete } from './pages/importcomplete';
 import { Navbar } from './components/navbar';
 import { SurveyStorage } from './common';
+import { Test } from './pages/test';
 
 
 export const App = () => {
@@ -16,6 +17,7 @@ export const App = () => {
           <Routes>
               <Route path="/" element={<DoImport setImport={setImport} />} />
               <Route path="/about" element={<About />} />
+              <Route path="/test" element={<Test />} />
               <Route path="/dump/:id/:surveyNumber" element={<MnemoDump />} />
               <Route path="/imported/:id" element={<ImportComplete imports={imports} />} />
           </Routes>

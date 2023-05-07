@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { Link, useParams } from "react-router-dom";
 import { surveyListFromByteArray, dmpFromByteArray, ShotType, Survey, Direction } from 'mnemo-dmp';
 import { Import, SurveyStorage } from "../common";
+import { MiniMap } from "../components/minimap";
 
 class EditSurvey {
     survey: Survey;
@@ -17,7 +18,7 @@ class EditSurvey {
 }
 
 function RenderSurvey({ imp, surveyNum }: { imp: Import, surveyNum: number }): JSX.Element {
-    console.log(`RenderSurvey ${imp.id}/${surveyNum}`);
+    //console.log(`RenderSurvey ${imp.id}/${surveyNum}`);
 
     const surveyList = surveyListFromByteArray(Uint8Array.from(imp.data));
     const s = surveyList[surveyNum];
@@ -37,6 +38,10 @@ function RenderSurvey({ imp, surveyNum }: { imp: Import, surveyNum: number }): J
 
     return (<div className="list-group col-lg">
         <p>{survey.survey.date.toTimeString()}</p>
+        <div className="text-center"  >
+            <MiniMap survey={s} />
+        </div>
+        
         {/* <div className="text-center">
             <div className="btn-group col-2 btn-group-sm" role="group" aria-label="Basic example">
                 <input
