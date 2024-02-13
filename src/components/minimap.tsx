@@ -10,8 +10,8 @@ class Point {
 }
 
 function toPoint(degrees: number, length: number) {
-    const x = length * Math.cos(Math.PI * degrees / 180.0)
-    const y = length * Math.sin(Math.PI * degrees / 180.0)
+    const x = length * Math.cos(Math.PI * (degrees -90.0) / 180.0)
+    const y = length * Math.sin(Math.PI * (degrees -90.0) / 180.0)
     return new Point(x, y);
 }
 
