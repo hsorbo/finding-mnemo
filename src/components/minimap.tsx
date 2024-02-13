@@ -39,8 +39,8 @@ export const MiniMap = ({ survey }: { survey: Survey }) => {
     let at = points[0];
 
     return (
-        <svg width="200" height="200"
-            viewBox={`${box.min.x} ${box.min.y} ${box.max.x - box.min.y} ${box.max.y - box.min.y}`}>
+        <svg width="250" height="250"
+            viewBox={`${box.min.x} ${box.min.y} ${box.max.x - box.min.x} ${box.max.y - box.min.y}`}>
             {
                 points.slice(1).map((p, i) => {
                     const lfrm = new Point(at.x, at.y);
