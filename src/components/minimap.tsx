@@ -1,5 +1,5 @@
 import { Shot, Survey } from "mnemo-dmp";
-
+import "./minimap.css";
 class Point {
     x: number;
     y: number;
@@ -10,8 +10,8 @@ class Point {
 }
 
 function toPoint(degrees: number, length: number) {
-    const x = length * Math.cos(Math.PI * (degrees -90.0) / 180.0)
-    const y = length * Math.sin(Math.PI * (degrees -90.0) / 180.0)
+    const x = length * Math.cos(Math.PI * (degrees - 90.0) / 180.0)
+    const y = length * Math.sin(Math.PI * (degrees - 90.0) / 180.0)
     return new Point(x, y);
 }
 
@@ -31,9 +31,10 @@ export const MiniMap = ({ survey }: { survey: Survey }) => {
     const points = toPoints(survey.shots);
     const xs = points.map(p => p.x);
     const ys = points.map(p => p.y);
+    const margin = 2;
     const box = {
-        min: new Point(Math.min(...xs), Math.min(...ys)),
-        max: new Point(Math.max(...xs), Math.max(...ys)),
+        min: new Point(Math.min(...xs)-margin, Math.min(...ys)-margin),
+        max: new Point(Math.max(...xs)+margin, Math.max(...ys)+margin),
     };
 
     let at = points[0];
@@ -45,18 +46,30 @@ export const MiniMap = ({ survey }: { survey: Survey }) => {
                 points.slice(1).map((p, i) => {
                     const lfrm = new Point(at.x, at.y);
                     const lto = new Point(p.x, p.y);
-                    const stroke = i % 2 === 0 ? "white" : "white";
+                    //const stroke = i % 2 === 0 ? "white" : "white";
                     at = lto;
                     return (
-                        <line
-                            x1={lfrm.x}
-                            x2={lto.x}
-                            y1={lfrm.y}
-                            y2={lto.y}
-                            key={i}
-                            stroke={stroke}
-                            onMouseOver={() => console.log("over")}
-                            strokeWidth="1%" />)
+                        <>
+                            <line
+                                className="minimap-line"
+                                x1={lfrm.x}
+                                x2={lto.x}
+                                y1={lfrm.y}
+                                y2={lto.y}
+                                key={i}
+                                //stroke={stroke}
+                                onMouseDown={(e) => {
+                                    console.log(e.currentTarget);
+                                }}
+                                //onMouseOut={() => stroke = "green"}
+                                strokeWidth="1%">
+                                <title>{`${i}: ${lfrm.x},${lfrm.y} -> ${lto.x},${lto.y}`}</title>
+                            </line>
+                            <circle className="minimap-station" cx={lfrm.x} cy={lfrm.y} r="1">
+                                <animateTransform attributeName="transform" type="scale" additive="sum" from="0 0" to="1 1" begin="0s" dur="0.5s" repeatCount="1"></animateTransform>
+                            </circle>
+                        </>
+                    )
                 }
                 )}
         </svg>

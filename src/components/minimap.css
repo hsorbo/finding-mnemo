@@ -1,0 +1,14 @@
+.minimap-line {
+    stroke: white;
+  }
+.minimap-line:hover {
+    stroke: #0c72ef;
+    stroke-width: 3%;
+}
+.minimap-station {
+    fill: red;
+}
+
+.minimap-station:hover {
+    fill: royalblue;
+}
