@@ -24,6 +24,7 @@ function RenderSurvey({ imp, surveyNum }: { imp: Import, surveyNum: number }): J
     const s = surveyList[surveyNum];
     const [direction, setDirection] = useState(s.direction);
     const [survey, setSurvey] = useState(boom(imp, s, surveyNum));
+    const [importComments, setImportComments] = useState(boom2(imp, imp.importComments));
 
     const updateComment = (i: number, s: string) => {
         setSurvey(old => {
@@ -33,7 +34,13 @@ function RenderSurvey({ imp, surveyNum }: { imp: Import, surveyNum: number }): J
             //console.log(JSON.stringify(changed.comments, null, 2));
             SurveyStorage.setComments(survey.importId, survey.surveyId, changed.comments);
             return changed;
-        })
+        });
+    }
+    const updateImportComments = (s: string) => {
+        setImportComments(old => {
+            SurveyStorage.setImportComment(survey.importId, s);
+            return s;
+        });
     }
 
     return (<div className="list-group col-lg">
@@ -100,7 +107,30 @@ function RenderSurvey({ imp, surveyNum }: { imp: Import, surveyNum: number }): J
                 </div>
             )
         })}
-    </div>)
+        <li className="list-group-item list-group-item-secondary d-flex justify-content-between align-items-start" >
+            <div className="container text-center">
+                <div className="row">
+                    <div className="col-sm small">Other</div>
+                </div>
+            </div>
+        </li>
+        <li className="list-group-item" >
+            <div className="row align-items-stretch">
+                <div className="col-md-1 bg-primary">
+                    <div className="row">
+                        <div className="col fw-bold" >Other</div>
+                    </div>
+                </div>
+                <textarea
+                    className="form-control col-md"
+                    style={{ "resize": "none", "borderRadius": "0px" }}
+                    onChange={e => updateImportComments(e.target.value)}
+                    rows={3}
+                    value={importComments}
+                />
+            </div>
+        </li>
+    </div >)
 }
 
 function download(bb: Blob, filename: string) {
@@ -122,6 +152,8 @@ function downloadComments(imp: Import) {
         });
         txt += '\n';
     });
+    txt += `Import comments:\n${SurveyStorage.getImportComment(imp.id)}\n`;
+
     download(
         new Blob([txt], { type: 'text/plain' }),
         `${imp.date} ${imp.location} ${imp.surveryors}.txt`);
@@ -142,6 +174,9 @@ function boom(imp: Import, survey: Survey, surveyNumber: number) {
     return new EditSurvey(imp.id, surveyNumber, survey, comments);
 }
 
+function boom2(imp: Import, comment:string) {
+    return SurveyStorage.getImportComment(imp.id);
+}
 
 export const MnemoDump = () => {
     const { id, surveyNumber } = useParams();

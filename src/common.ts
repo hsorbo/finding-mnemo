@@ -10,6 +10,7 @@ export interface Import {
     location: string;
     comment: string;
     data: Array<number>;
+    importComments: string;
 }
 
 export interface SurveyComments {
@@ -17,14 +18,21 @@ export interface SurveyComments {
     surveyId: number;
     comments: string[];
 }
+
+export interface ImportComment {
+    importId: number;
+    comment: string;
+}
+
 interface Storage {
     imports: Array<Import>;
     comments: Array<SurveyComments>;
+    importComments: Array<ImportComment>;
 }
 
 export class SurveyStorage {
     static zero(): Storage {
-        return { imports: [], comments: [] };
+        return { imports: [], comments: [], importComments: []};
     }
 
     static read(): Storage {
@@ -62,6 +70,7 @@ export class SurveyStorage {
             surveryors: "Unknown",
             location: "Unknown",
             comment,
+            importComments: ""
         }
         storage.imports.push(newImport);
         this.write(storage);
@@ -86,9 +95,26 @@ export class SurveyStorage {
         const storage = this.read();
         
         console.log(storage.comments);
-        storage.comments = storage.comments.filter(x => !(x.importId === importId && x.surveyId === surveyId));
+        storage.comments = (storage.comments ?? []).filter(x => !(x.importId === importId && x.surveyId === surveyId));
         console.log(storage.comments);
         storage.comments.push({ importId, surveyId, comments });
         this.write(storage);
     }
+
+    static setImportComment(importId: number, additionalComments: string) {
+        const storage = this.read();
+        storage.importComments = (storage.importComments ?? []).filter(x => x.importId !== importId);
+        storage.importComments.push({ importId, comment: additionalComments });
+        this.write(storage);
+    }
+    
+    static getImportComment(id: number) {
+        const storage = this.read();
+        return (storage.importComments ?? [])
+            .filter(x => x.importId === id)
+            .map(x => x.comment)
+        [0] ?? "";
+    }
+
+    
 }
