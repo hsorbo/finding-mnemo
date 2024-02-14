@@ -43,13 +43,14 @@ function RenderSurvey({ imp, surveyNum }: { imp: Import, surveyNum: number }): J
         });
     }
 
-    return (<div className="list-group col-lg">
-        <p>{survey.survey.date.toTimeString()}</p>
-        <div className="text-center"  >
-            <MiniMap survey={s} />
-        </div>
-        
-        {/* <div className="text-center">
+    return (
+        <div className="list-group col-lg">
+            <p>{survey.survey.date.toTimeString()}</p>
+            <div className="sticky-top text-center bg-body">
+                <MiniMap survey={s} />
+            </div>
+
+            {/* <div className="text-center">
             <div className="btn-group col-2 btn-group-sm" role="group" aria-label="Basic example">
                 <input
                     type="radio"
@@ -69,68 +70,69 @@ function RenderSurvey({ imp, surveyNum }: { imp: Import, surveyNum: number }): J
                 <label className="btn btn-outline-primary" htmlFor="btnradio2">OUT</label>
             </div>
         </div> */}
-        <br />
+            <br />
 
-        {survey.survey.shots.filter(x => x.type !== ShotType.CSA).map((shot, i) => {
-            // style={{ "border": "1px solid red" }}
-            return (
-                <div key={i}>
-                    <li className="list-group-item" >
-                        <div className="row align-items-stretch">
-                            <div className="col-md-1 bg-primary">
-                                <div className="row">
-                                    <div className="col fw-bold" >#{i + 1}</div>
+            {survey.survey.shots.filter(x => x.type !== ShotType.CSA).map((shot, i) => {
+                // style={{ "border": "1px solid red" }}
+                return (
+                    <div key={i}>
+                        <li className="list-group-item" >
+                            <div className="row align-items-stretch">
+                                <div className="col-md-1 bg-primary">
+                                    <div className="row">
+                                        <div className="col fw-bold" >#{i + 1}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <textarea
-                                className="form-control col-md"
-                                style={{ "resize": "none", "borderRadius": "0px" }}
-                                onChange={e => updateComment(i, e.target.value)}
-                                rows={3}
-                                value={survey.comments[i]}
-                            />
-                        </div>
-                    </li>
-                    {
-                        shot.type !== ShotType.EOC &&
-                        <li className="list-group-item list-group-item-secondary d-flex justify-content-between align-items-start">
-                            <div className="container text-center">
-                                <div className="row">
-                                    {/* <div className="col-sm">Shot {i + 1} -&gt; {i + 2}</div> */}
-                                    <div className="col-sm small">Heading {shot.head_in}/{shot.head_out}</div>
-                                    <div className="col-sm small">Depth {shot.depth_in}/{shot.depth_out}</div>
-                                    <div className="col-sm small">Length {shot.length}m</div>
-                                </div>
+                                <textarea
+                                    className="form-control col-md"
+                                    style={{ "resize": "none", "borderRadius": "0px" }}
+                                    onFocus={e => e.target.select()}
+                                    onChange={e => updateComment(i, e.target.value)}
+                                    rows={3}
+                                    value={survey.comments[i]}
+                                />
                             </div>
                         </li>
-                    }
-                </div>
-            )
-        })}
-        <li className="list-group-item list-group-item-secondary d-flex justify-content-between align-items-start" >
-            <div className="container text-center">
-                <div className="row">
-                    <div className="col-sm small">Other</div>
-                </div>
-            </div>
-        </li>
-        <li className="list-group-item" >
-            <div className="row align-items-stretch">
-                <div className="col-md-1 bg-primary">
+                        {
+                            shot.type !== ShotType.EOC &&
+                            <li className="list-group-item list-group-item-secondary d-flex justify-content-between align-items-start">
+                                <div className="container text-center">
+                                    <div className="row">
+                                        {/* <div className="col-sm">Shot {i + 1} -&gt; {i + 2}</div> */}
+                                        <div className="col-sm small">Heading {shot.head_in}/{shot.head_out}</div>
+                                        <div className="col-sm small">Depth {shot.depth_in}/{shot.depth_out}</div>
+                                        <div className="col-sm small">Length {shot.length}m</div>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    </div>
+                )
+            })}
+            <li className="list-group-item list-group-item-secondary d-flex justify-content-between align-items-start" >
+                <div className="container text-center">
                     <div className="row">
-                        <div className="col fw-bold" >Other</div>
+                        <div className="col-sm small">Other</div>
                     </div>
                 </div>
-                <textarea
-                    className="form-control col-md"
-                    style={{ "resize": "none", "borderRadius": "0px" }}
-                    onChange={e => updateImportComments(e.target.value)}
-                    rows={3}
-                    value={importComments}
-                />
-            </div>
-        </li>
-    </div >)
+            </li>
+            <li className="list-group-item" >
+                <div className="row align-items-stretch">
+                    <div className="col-md-1 bg-primary">
+                        <div className="row">
+                            <div className="col fw-bold" >Other</div>
+                        </div>
+                    </div>
+                    <textarea
+                        className="form-control col-md"
+                        style={{ "resize": "none", "borderRadius": "0px" }}
+                        onChange={e => updateImportComments(e.target.value)}
+                        rows={3}
+                        value={importComments}
+                    />
+                </div>
+            </li>
+        </div >)
 }
 
 function download(bb: Blob, filename: string) {
@@ -174,7 +176,7 @@ function boom(imp: Import, survey: Survey, surveyNumber: number) {
     return new EditSurvey(imp.id, surveyNumber, survey, comments);
 }
 
-function boom2(imp: Import, comment:string) {
+function boom2(imp: Import, comment: string) {
     return SurveyStorage.getImportComment(imp.id);
 }
 
@@ -207,7 +209,7 @@ export const MnemoDump = () => {
                         <li><a className="dropdown-item" onClick={() => downloadComments(imp)}>Download comments (.txt)</a></li>
                     </ul>
                 </div>
-                <br/>
+                <br />
                 {surveyList.length < 1 && <h2>No surveys found</h2>}
                 <nav className="nav nav-pills justify-content-center">
                     {surveyList.map((survey, i) => (
@@ -215,7 +217,7 @@ export const MnemoDump = () => {
                             className={`nav-link ${i === surveyNumberInt ? "active" : ""}`}
                             aria-current="page" to={"/dump/" + id + "/" + i}>{survey.name}{i}</Link>),)}
                 </nav>
-                <br/>
+                <br />
                 <RenderSurvey imp={imp} surveyNum={surveyNumberInt} key={key} />
             </div >
         )
