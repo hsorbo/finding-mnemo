@@ -23,6 +23,7 @@ function RenderSurvey({ imp, surveyNum }: { imp: Import, surveyNum: number }): J
     const surveyList = surveyListFromByteArray(Uint8Array.from(imp.data));
     const s = surveyList[surveyNum];
     const [direction, setDirection] = useState(s.direction);
+    const [selectedStation, setSelectedStation] = useState(null as number | null);
     const [survey, setSurvey] = useState(boom(imp, s, surveyNum));
     const [importComments, setImportComments] = useState(boom2(imp, imp.importComments));
 
@@ -47,7 +48,7 @@ function RenderSurvey({ imp, surveyNum }: { imp: Import, surveyNum: number }): J
         <div className="list-group col-lg">
             <p>{survey.survey.date.toTimeString()}</p>
             <div className="sticky-top text-center bg-body">
-                <MiniMap survey={s} />
+                <MiniMap survey={s} station={selectedStation} />
             </div>
 
             {/* <div className="text-center">
@@ -86,7 +87,11 @@ function RenderSurvey({ imp, surveyNum }: { imp: Import, surveyNum: number }): J
                                 <textarea
                                     className="form-control col-md"
                                     style={{ "resize": "none", "borderRadius": "0px" }}
-                                    onFocus={e => e.target.select()}
+                                    onFocus={e => {
+                                        setSelectedStation(i);
+                                        e.target.select();
+                                    }}
+                                    onBlur={e => setSelectedStation(null)}
                                     onChange={e => updateComment(i, e.target.value)}
                                     rows={3}
                                     value={survey.comments[i]}

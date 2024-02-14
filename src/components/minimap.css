@@ -12,3 +12,7 @@
 .minimap-station:hover {
     fill: royalblue;
 }
+
+.minimap-station-selected {
+    fill: yellow;
+}

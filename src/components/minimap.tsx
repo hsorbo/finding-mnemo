@@ -27,7 +27,7 @@ function toPoints(shots: Shot[]) {
 }
 
 
-export const MiniMap = ({ survey }: { survey: Survey }) => {
+export const MiniMap = ({ survey, station  }: { survey: Survey, station: number | null }) => {
     const points = toPoints(survey.shots);
     const xs = points.map(p => p.x);
     const ys = points.map(p => p.y);
@@ -57,15 +57,15 @@ export const MiniMap = ({ survey }: { survey: Survey }) => {
                                 y1={lfrm.y}
                                 y2={lto.y}
                                 key={i}
-                                //stroke={stroke}
-                                onMouseDown={(e) => {
-                                    console.log(e.currentTarget);
-                                }}
-                                //onMouseOut={() => stroke = "green"}
                                 strokeWidth="1%">
                                 <title>{`${i}: ${lfrm.x},${lfrm.y} -> ${lto.x},${lto.y}`}</title>
                             </line>
-                            <circle className="minimap-station" cx={lfrm.x} cy={lfrm.y} r="1">
+                            <circle
+                                className={station === i ? "minimap-station-selected" : "minimap-station"}
+                                cx={lfrm.x}
+                                cy={lfrm.y}
+                                key={i}
+                                r="1">
                                 <animateTransform attributeName="transform" type="scale" additive="sum" from="0 0" to="1 1" begin="0s" dur="0.5s" repeatCount="1"></animateTransform>
                             </circle>
                         </>
@@ -73,7 +73,6 @@ export const MiniMap = ({ survey }: { survey: Survey }) => {
                 }
                 )}
         </svg>
-
     )
 }
 
